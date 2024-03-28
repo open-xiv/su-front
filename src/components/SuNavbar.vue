@@ -54,7 +54,7 @@ function copyKey() {
         </div>
       </a>
       <div class="dropdown">
-        <label class="font-mono text-xs" tabindex="0">Beta v03.27.24</label>
+        <label class="font-mono text-xs" tabindex="0">Beta v0.1.0</label>
 <!--        <label class="link link-hover font-mono text-xs" tabindex="0">Beta v03.27.24</label>-->
 <!--        <ul class="dropdown-content menu menu-sm bg-base-200 rounded-box mt-8 w-40 p-2 shadow">-->
 <!--          <li>-->
