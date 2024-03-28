@@ -21,7 +21,7 @@ const fights = ref<FightRecord[]>([]);
 
 // stat - 2 - time
 // last record time
-const lastRecordTime = computed(() => {
+const lastRecordTime = computed<[(string | number), string]>(() => {
   if (fights.value.length > 0) {
     // timestamp to date
     const recordTime = new Date(fights.value[fights.value.length - 1].area.op.timestamp * 1000);
@@ -30,9 +30,9 @@ const lastRecordTime = computed(() => {
     const diff = now.getTime() - recordTime.getTime();
     // match
     if (diff < 60 * 1000) {
-      return ["Just"];
+      return ["Just", ""];
     } else if (diff < 60 * 60 * 1000) {
-      return [Math.floor(diff / (60 * 1000)), "分钟前"];
+      return [Math.floor(diff / (60 * 1000)), " 分钟前"];
     } else if (diff < 24 * 60 * 60 * 1000) {
       return [Math.floor(diff / (60 * 60 * 1000)), " 小时前"];
     } else {
@@ -46,7 +46,7 @@ const lastRecordTime = computed(() => {
 const getTimeAnalysis = computed(() => {
   if (fights.value.length == 0) {
     return "注册了不用是吧💢";
-  } else if (lastRecordTime.value[1].lastIndexOf("天") && lastRecordTime.value[0] > 7) {
+  } else if (lastRecordTime.value[1].lastIndexOf("天") && <number>lastRecordTime.value[0] > 7) {
     return "鉴定为摆烂人";
   } else {
     return "阿伟又在打电动哦 休息一下吧";
@@ -138,7 +138,7 @@ onMounted(() => {
           <div class="stat-title">最近记录时间</div>
           <div class="stat-value text-secondary">
             <span>{{ lastRecordTime[0] }}</span>
-            <span class="text-xl">{{ lastRecordTime[1] }}</span>
+            <span v-if="lastRecordTime[1]" class="text-xl">{{ lastRecordTime[1] }}</span>
           </div>
           <div class="stat-desc">{{ getTimeAnalysis }}</div>
         </div>

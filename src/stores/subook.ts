@@ -9,7 +9,7 @@ export const useSuStore = defineStore("server", () => {
     const suTitle = ref("酥卷 Beta");
 
     // server api
-    const serverURL = ref("http://localhost:8123");
+    const serverURL = ref("https://subook.api.sumemo.net");
 
     // return
     return {author, suTitle, serverURL};
