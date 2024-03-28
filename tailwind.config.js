@@ -4,7 +4,11 @@ module.exports = {
         "./src/**/*.{vue, js, ts, jsx, tsx}",
     ],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                "moe": ["LXGW WenKai", "sans-serif"],
+            }
+        }
     },
     plugins: [
         require("@tailwindcss/typography"),
@@ -14,5 +18,5 @@ module.exports = {
         themes: ["light", "night"],
         darkTheme: "night",
     }
-}
+};
 

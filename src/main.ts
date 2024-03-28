@@ -1,14 +1,15 @@
-import "./assets/main.css";
+import "@/assets/main.postcss";
+import "virtual:svg-icons-register";
 
 import {createApp} from "vue";
-import {createPinia} from "pinia";
 
-import App from "./App.vue";
-import router from "./router";
+import App from "@/App.vue";
+import router from "@/router";
+import pinia from "@/stores";
 
 const app = createApp(App);
 
-app.use(createPinia());
+app.use(pinia);
 app.use(router);
 
 app.mount("#app");
