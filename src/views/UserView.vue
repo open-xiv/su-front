@@ -71,6 +71,11 @@ const remainNum = computed(() => {
   return suMeta.value.total - fightIds.value.length - suMeta.value.base;
 });
 
+// sorted fights
+const sortedFights = computed(() => {
+  return fights.value.sort((a, b) => a.area.op.timestamp - b.area.op.timestamp);
+});
+
 
 // on mounted
 onMounted(() => {
@@ -156,7 +161,7 @@ onMounted(() => {
 
       <div v-if="fights && fights.length !== 0" class="flex flex-col space-y-2">
         <fight-table
-            v-for="(fight, f_idx) in fights" :key="fight" :fight="fight" :idx="f_idx as number + suMeta.base + 1"/>
+            v-for="(fight, f_idx) in sortedFights" :key="f_idx" :fight="fight" :idx="f_idx as number + suMeta.base + 1"/>
       </div>
 
     </div>

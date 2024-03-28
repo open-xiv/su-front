@@ -3,7 +3,7 @@ import {defineStore} from "pinia";
 
 export const useSuStore = defineStore("server", () => {
     // author
-    const author = ref("蛋卷酥-红茶川");
+    const author = ref("蛋卷酥-宇宙和音");
 
     // subook document title
     const suTitle = ref("酥卷 Beta");
@@ -13,6 +13,4 @@ export const useSuStore = defineStore("server", () => {
 
     // return
     return {author, suTitle, serverURL};
-}, {
-    persist: true
 });

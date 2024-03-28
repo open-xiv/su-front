@@ -1,15 +1,14 @@
+<script lang="ts" setup>
+import SvgIcon from "@/components/SvgIcon.vue";
+</script>
+
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div>
+    <div class="m-6 flex flex-col space-y-4">
+      <div class="alert alert-primary">
+        <svg-icon class="h-5 w-5" fill="none" icon-name="hearts" size="20"/>
+        <span class="font-moe">欢迎来到酥卷！</span>
+      </div>
+    </div>
   </div>
 </template>
-
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
-</style>

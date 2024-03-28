@@ -7,28 +7,39 @@ const props = defineProps<{
 }>();
 
 const timeString = computed(() => {
-  const date = new Date(props.fight.area.op.timestamp * 1000);
+  const timestamp = props.fight.area.op.timestamp;
+  if (timestamp < 1687400000) {
+    return "NaN";
+  }
+  const date = new Date(timestamp * 1000);
   return date.toLocaleString();
+});
+
+const fullRecord = computed(() => {
+  return props.fight.players.length > 1;
 });
 </script>
 
 <template>
   <div class="flex items-center space-x-4 w-full">
-    <div class="collapse collapse-arrow border border-base-300 bg-base-200" tabindex="0">
+    <div :class="{'collapse-arrow': fullRecord}" class="collapse border border-base-300 bg-base-200" tabindex="0">
 
       <div class="collapse-title flex items-center justify-between">
-        <p class="ml-2 text-base font-medium font-mono"> {{
-            idx.toString().padStart(4, "0") + " " + props.fight.area.instance.name
-          }}</p>
-        <div class="text-sm font-mono flex space-x-4">
-          <p class="text-primary/50 hidden lg:block">{{ timeString }}</p>
-          <p class="text-sm font-mono hidden sm:block"> {{
-              props.fight.players[0].job.name + " lv." + props.fight.players[0].level
-            }}</p>
+        <div class="flex space-x-4 items-center">
+          <p class="ml-2 text-base font-medium font-mono">
+            {{ idx.toString().padStart(4, "0") + " " + props.fight.area.instance.name }}
+          </p>
+          <p v-if="timeString != 'NaN'" class="text-sm font-mono text-gray-600 hidden lg:block">{{ timeString }}</p>
+        </div>
+
+        <div class="text-sm font-mono flex space-x-4 items-center">
+          <p class="font-mono font-bold hidden sm:block">
+            {{ props.fight.players[0].job.name + " lv." + props.fight.players[0].level }}
+          </p>
         </div>
       </div>
 
-      <div class="collapse-content flex flex-col space-y-4">
+      <div v-if="fullRecord" class="collapse-content flex flex-col space-y-4">
 
         <table class="table table-sm card glass">
           <thead>

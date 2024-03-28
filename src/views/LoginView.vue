@@ -3,10 +3,10 @@ import SvgIcon from "@/components/SvgIcon.vue";
 
 import axios from "axios";
 import router from "@/router";
-import {onMounted} from "vue";
-import {useUserStore} from "@/stores/user";
-import {snakeToCamel} from "@/tools";
-import {useSuStore} from "@/stores/subook";
+import { onMounted } from "vue";
+import { useUserStore } from "@/stores/user";
+import { snakeToCamel } from "@/tools";
+import { useSuStore } from "@/stores/subook";
 
 // focus event
 const currentInput = ref<string>("");
@@ -40,7 +40,7 @@ const rawServers = [
   {
     "label": "豆豆柴",
     "subServer": ["水晶塔", "银泪湖", "太阳海岸", "伊修加德", "红茶川"]
-  },
+  }
 ];
 const selectServer = ref<Server>();
 const selectSubServer = ref<string>();
@@ -76,49 +76,64 @@ const token = ref<string>("");
 const showTime = ref<number>(0);
 const errorMSG = ref<string>("");
 
+function getAvatar() {
+  // get user avatar url
+  const url = useSuStore().serverURL;
+  axios.get(url + "/api/public/user/" + useUserStore().user.person.name + "/avatar")
+    .then((res) => {
+      console.log(res.data.avatar_url);
+      useUserStore().user.person.avatarUrl = snakeToCamel(res.data.avatar_url);
+    })
+    .catch((err) => {
+      showError(err.response.data.message);
+    });
+}
+
+
 function login() {
   if (isEveryThingOk) {
     // build person info
     const personInfo = {
       name: playerName.value + "-" + selectSubServer.value,
-      password: password.value,
+      password: password.value
     };
     // send request
     const url = useSuStore().serverURL;
     isRegistering.value = true;
     blurContent.value = true;
     axios.post(url + "/api/protect/login", personInfo)
-        .then((res) => {
-          // success
-          isRegistering.value = false;
+      .then((res) => {
+        // success
+        isRegistering.value = false;
 
-          // token
-          token.value = res.data.token;
-          useUserStore().user.token = token.value;
+        // token
+        token.value = res.data.token;
+        useUserStore().user.token = token.value;
 
-          // get user info
-          const bearer = {headers: {Authorization: "Bearer " + token.value}};
-          axios.get(url + "/api/private/user", bearer)
-              .then((res) => {
-                useUserStore().user = snakeToCamel(res.data);
-              })
-              .catch((err) => {
-                showError(err.response.data.message);
-              });
+        // get user info
+        const bearer = { headers: { Authorization: "Bearer " + token.value } };
+        axios.get(url + "/api/private/user", bearer)
+          .then((res) => {
+            useUserStore().user = snakeToCamel(res.data);
+          })
+          .catch((err) => {
+            showError(err.response.data.message);
+          });
 
-          // animation
-          showTime.value = 3;
-          const timer = setInterval(() => {
-            showTime.value -= 1;
-            if (showTime.value === 0) {
-              clearInterval(timer);
-              router.push("/user/" + useUserStore().user.person.name);
-            }
-          }, 1000);
-        })
-        .catch((err) => {
-          showError(err.response.data.message);
-        });
+        // animation
+        showTime.value = 3;
+        const timer = setInterval(() => {
+          showTime.value -= 1;
+          if (showTime.value === 0) {
+            clearInterval(timer);
+            getAvatar();
+            router.push("/user/" + useUserStore().user.person.name);
+          }
+        }, 1000);
+      })
+      .catch((err) => {
+        showError(err.response.data.message);
+      });
   }
   return;
 }
@@ -165,10 +180,6 @@ onMounted(() => {
 <template>
   <div>
     <div :class="{'blur-md': blurContent, 'pointer-events-none': blurContent}" class="m-6 flex flex-col space-y-4">
-      <div class="alert alert-warning">
-        <svg-icon class="h-5 w-5" fill="none" icon-name="alert" size="20"/>
-        <span class="font-moe">这个页面还在早期开发阶段 难看就忍受一下 能用就行 感恩！</span>
-      </div>
 
       <div class="flex flex-col space-y-4 bg-base-300 rounded-box p-4 w-6/12 max-w-lg">
         <div class="flex flex-col space-y-4">
@@ -179,20 +190,20 @@ onMounted(() => {
             </div>
             <div class="flex space-x-2 items-end">
               <input
-                  v-model="playerName" class="input input-sm input-bordered w-auto max-w-xs font-mono"
-                  placeholder="例: 蛋卷酥"
-                  type="text" @blur="setCurrentInput('')" @focus="setCurrentInput('playerName')"/>
+                v-model="playerName" class="input input-sm input-bordered w-auto max-w-xs font-mono"
+                placeholder="例: 蛋卷酥"
+                type="text" @blur="setCurrentInput('')" @focus="setCurrentInput('playerName')" />
 
               <select
-                  v-model="selectServer" class="select select-sm select-bordered w-fit max-w-xs"
-                  @blur="setCurrentInput('')" @focus="setCurrentInput('playerName')">
+                v-model="selectServer" class="select select-sm select-bordered w-fit max-w-xs"
+                @blur="setCurrentInput('')" @focus="setCurrentInput('playerName')">
                 <option disabled selected>大区</option>
                 <option v-for="server in rawServers" :key="server.label" :value="server">{{ server.label }}</option>
               </select>
 
               <select
-                  v-if="selectServer" v-model="selectSubServer" class="select select-sm select-bordered w-fit max-w-xs"
-                  @blur="setCurrentInput('')" @focus="setCurrentInput('playerName')">
+                v-if="selectServer" v-model="selectSubServer" class="select select-sm select-bordered w-fit max-w-xs"
+                @blur="setCurrentInput('')" @focus="setCurrentInput('playerName')">
                 <option disabled>小区</option>
                 <option v-for="server in selectServer.subServer" :key="server" :value="server">{{
                     server
@@ -207,15 +218,19 @@ onMounted(() => {
               <span class="font-bold">密码</span>
             </div>
             <input
-                v-model="password"
-                :class="{ 'input-error': !isPasswordValid}"
-                class="input input-sm input-bordered w-auto max-w-xs font-mono"
-                type="password" @blur="setCurrentInput('')" @focus="setCurrentInput('password')"/>
+              v-model="password"
+              :class="{ 'input-error': !isPasswordValid}"
+              class="input input-sm input-bordered w-auto max-w-xs font-mono"
+              type="password" @blur="setCurrentInput('')" @focus="setCurrentInput('password')" />
           </div>
         </div>
       </div>
 
-      <button :disabled="!isEveryThingOk" class="btn btn-primary w-1/12" @click="login">登录</button>
+      <div class="flex space-x-1">
+        <button :disabled="!isEveryThingOk" class="btn btn-primary w-1/12" @click="login">登录</button>
+        <a class="font-moe btn btn-ghost w-1/12" href="/register">注册</a>
+      </div>
+
     </div>
 
     <div v-if="isRegistering" class="toast toast-center toast-middle">

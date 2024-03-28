@@ -152,10 +152,6 @@ async function register() {
 <template>
   <div>
     <div :class="{'blur-md': blurContent, 'pointer-events-none': blurContent}" class="m-6 flex flex-col space-y-4">
-      <div class="alert alert-warning">
-        <svg-icon class="h-5 w-5" fill="none" icon-name="alert" size="20"/>
-        <span class="font-moe">这个页面还在早期开发阶段 难看就忍受一下 能用就行 感恩！</span>
-      </div>
 
       <div class="flex flex-col space-y-4 bg-base-300 rounded-box p-4 w-9/12 max-x-lg">
         <div class="flex flex-col space-y-4">

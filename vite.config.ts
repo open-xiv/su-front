@@ -6,6 +6,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import {createSvgIconsPlugin} from "vite-plugin-svg-icons";
 import {resolve} from "path";
+import VueDevTools from 'vite-plugin-vue-devtools';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -24,6 +25,7 @@ export default defineConfig({
             iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
             symbolId: "icon-[dir]-[name]",
         }),
+        VueDevTools(),
     ],
     resolve: {
         alias: {
