@@ -85,12 +85,13 @@ onMounted(() => {
   document.title = name + " - " + useSuStore().suTitle;
 
   // get user fights
-  axios.get(useSuStore().serverURL + "/api/public/user/" + props.name + "/fights")
+  const url = useSuStore().serverURL;
+  axios.get(`${url}/public/user/${props.name}/fights`)
       .then((res) => {
         fightIds.value = snakeToCamel(res.data["fight_ids"]);
         // get fights
         for (const fightId of fightIds.value) {
-          axios.get(useSuStore().serverURL + "/api/public/fight/" + fightId)
+          axios.get(`${url}/public/fight/${fightId}`)
               .then((res) => {
                 fights.value.push(snakeToCamel(res.data["fight_record"]));
               });
@@ -98,13 +99,13 @@ onMounted(() => {
       });
 
   // get user meta
-  axios.get(useSuStore().serverURL + "/api/public/user/" + props.name + "/meta")
+  axios.get(`${url}/public/user/${props.name}/meta`)
       .then((res) => {
         suMeta.value = snakeToCamel(res.data["meta"]);
       });
 
   // get user avatar
-  axios.get(useSuStore().serverURL + "/api/public/user/" + props.name + "/avatar")
+  axios.get(`${url}/public/user/${props.name}/avatar`)
       .then((res) => {
         avatarUrl.value = snakeToCamel(res.data["avatar_url"]);
       });

@@ -79,7 +79,7 @@ const errorMSG = ref<string>("");
 function getAvatar() {
   // get user avatar url
   const url = useSuStore().serverURL;
-  axios.get(url + "/api/public/user/" + useUserStore().user.person.name + "/avatar")
+  axios.get(`${url}/public/user/${useUserStore().user.person.name}/avatar`)
     .then((res) => {
       console.log(res.data.avatar_url);
       useUserStore().user.person.avatarUrl = snakeToCamel(res.data.avatar_url);
@@ -101,7 +101,7 @@ function login() {
     const url = useSuStore().serverURL;
     isRegistering.value = true;
     blurContent.value = true;
-    axios.post(url + "/api/protect/login", personInfo)
+    axios.post(`${url}/protect/login`, personInfo)
       .then((res) => {
         // success
         isRegistering.value = false;
@@ -112,7 +112,7 @@ function login() {
 
         // get user info
         const bearer = { headers: { Authorization: "Bearer " + token.value } };
-        axios.get(url + "/api/private/user", bearer)
+        axios.get(`${url}/private/user`, bearer)
           .then((res) => {
             useUserStore().user = snakeToCamel(res.data);
           })

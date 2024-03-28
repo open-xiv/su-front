@@ -15,7 +15,7 @@ const hasLogin = ref<boolean>(false);
 function checkServerStatus() {
   // send request
   const url = useSuStore().serverURL;
-  axios.get( url+"/api/public/status")
+  axios.get(`${url}/public/status`)
     .then((rsp) => {
       serverStatus.value = rsp.data.status;
     })

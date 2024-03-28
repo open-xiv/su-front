@@ -101,7 +101,7 @@ async function register() {
     const url = useSuStore().serverURL;
     isRegistering.value = true;
     blurContent.value = true;
-    axios.post(url + "/api/protect/user", personInfo)
+    axios.post(`${url}/protect/user`, personInfo)
         .then((res) => {
           // success
           isRegistering.value = false;
