@@ -46,7 +46,7 @@ const lastRecordTime = computed<[(string | number), string]>(() => {
 const getTimeAnalysis = computed(() => {
   if (fights.value.length == 0) {
     return "注册了不用是吧💢";
-  } else if (lastRecordTime.value[1].lastIndexOf("天") && <number>lastRecordTime.value[0] > 7) {
+  } else if (lastRecordTime.value[1].includes("天") && Number(lastRecordTime.value[0]) > 7) {
     return "鉴定为摆烂人";
   } else {
     return "阿伟又在打电动哦 休息一下吧";

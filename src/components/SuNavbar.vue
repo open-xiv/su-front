@@ -85,11 +85,11 @@ function copyKey() {
       </button>
 
       <div v-if="isLogin" class="dropdown dropdown-end">
-        <label class="btn btn-ghost btn-circle avatar" tabindex="0">
+        <div class="btn btn-ghost btn-circle avatar" tabindex="0" role="button">
           <div class="w-10 rounded-full">
             <img :src="useUserStore().getAvatarURL()" alt="avatar" />
           </div>
-        </label>
+        </div>
         <ul class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52" tabindex="0">
           <li><a @click="copyKey()">复制 Key</a></li>
           <li>
