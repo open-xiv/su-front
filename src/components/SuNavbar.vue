@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {useUserStore} from "@/stores/user";
+import { useUserStore } from "@/stores/user";
 import SvgIcon from "@/components/SvgIcon.vue";
 import router from "@/router";
 
@@ -54,13 +54,13 @@ function copyKey() {
         </div>
       </a>
       <div class="dropdown">
-        <label class="font-mono text-xs" tabindex="0">Beta v0.1.0</label>
-<!--        <label class="link link-hover font-mono text-xs" tabindex="0">Beta v03.27.24</label>-->
-<!--        <ul class="dropdown-content menu menu-sm bg-base-200 rounded-box mt-8 w-40 p-2 shadow">-->
-<!--          <li>-->
-<!--            <a href="/docs/changelog">更新日志</a>-->
-<!--          </li>-->
-<!--        </ul>-->
+        <label class="font-mono text-xs" tabindex="0">Beta v0.1.1</label>
+        <!--        <label class="link link-hover font-mono text-xs" tabindex="0">Beta v03.27.24</label>-->
+        <!--        <ul class="dropdown-content menu menu-sm bg-base-200 rounded-box mt-8 w-40 p-2 shadow">-->
+        <!--          <li>-->
+        <!--            <a href="/docs/changelog">更新日志</a>-->
+        <!--          </li>-->
+        <!--        </ul>-->
       </div>
     </div>
 
@@ -68,26 +68,26 @@ function copyKey() {
 
       <div v-if="isSearchEntering" class="form-control">
         <input
-            v-model="searchName" :class="{'input-error': searchName && !isNameValid, 'input-primary': isNameValid}"
-            class="input input-bordered w-64 font-moe" placeholder="例: 蛋卷酥-红茶川"
-            type="text" @keyup.enter="jumpUser()"/>
+          v-model="searchName" :class="{'input-error': searchName && !isNameValid, 'input-primary': isNameValid}"
+          class="input input-bordered w-64 font-moe" placeholder="例: 蛋卷酥-红茶川"
+          type="text" @keyup.enter="jumpUser()" />
       </div>
 
       <button
-          :class="{'btn-circle': !isSearchEntering, 'btn-square btn-outline': isSearchEntering}"
-          class="btn btn-ghost"
-          @click="isSearchEntering = !isSearchEntering; jumpUser();">
-        <svg-icon class="h-5 w-5" icon-name="search" size="20"/>
+        :class="{'btn-circle': !isSearchEntering, 'btn-square btn-outline': isSearchEntering}"
+        class="btn btn-ghost"
+        @click="isSearchEntering = !isSearchEntering; jumpUser();">
+        <svg-icon class="h-5 w-5" icon-name="search" size="20" />
       </button>
 
       <button v-if="!isLogin" class="btn btn-ghost btn-circle" @click="router.push('/login')">
-        <svg-icon class="h-5 w-5" icon-name="login" size="20"/>
+        <svg-icon class="h-5 w-5" icon-name="login" size="20" />
       </button>
 
       <div v-if="isLogin" class="dropdown dropdown-end">
         <label class="btn btn-ghost btn-circle avatar" tabindex="0">
           <div class="w-10 rounded-full">
-            <img :src="useUserStore().getAvatarURL()" alt="avatar"/>
+            <img :src="useUserStore().getAvatarURL()" alt="avatar" />
           </div>
         </label>
         <ul class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52" tabindex="0">
@@ -106,6 +106,7 @@ function copyKey() {
       <form class="modal-box" method="dialog">
         <h3 class="font-bold text-lg">Key 复制成功</h3>
         <p class="py-4">请妥善保存 一旦丢失则将损害账户安全！</p>
+        <p class="text-sm text-gray-400">点击任意空白处关闭窗口</p>
       </form>
       <form class="modal-backdrop" method="dialog">
         <button>close</button>
@@ -116,6 +117,7 @@ function copyKey() {
       <form class="modal-box" method="dialog">
         <h3 class="font-bold text-lg">开发中！</h3>
         <p class="py-4">虽然你很急 但你先别急</p>
+        <p class="text-sm text-gray-400">点击任意空白处关闭窗口</p>
       </form>
       <form class="modal-backdrop" method="dialog">
         <button>close</button>

@@ -1,7 +1,7 @@
 import "@/assets/main.postcss";
 import "virtual:svg-icons-register";
 
-import {createApp} from "vue";
+import { createApp } from "vue";
 
 import App from "@/App.vue";
 import router from "@/router";

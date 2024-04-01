@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import SvgIcon from "@/components/SvgIcon.vue";
-
 import axios from "axios";
 import router from "@/router";
 import { onMounted } from "vue";

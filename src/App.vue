@@ -5,7 +5,7 @@ import HomeView from "@/views/HomeView.vue";
 
 <template>
   <div class="w-full flex flex-col space-y-4">
-    <su-navbar/>
-    <home-view/>
+    <su-navbar />
+    <home-view />
   </div>
 </template>

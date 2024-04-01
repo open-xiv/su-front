@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import SvgIcon from "@/components/SvgIcon.vue";
-import {onMounted} from "vue";
-import {useSuStore} from "@/stores/subook";
+import { onMounted } from "vue";
+import { useSuStore } from "@/stores/subook";
 import axios from "axios";
-import {snakeToCamel} from "@/tools";
+import { snakeToCamel } from "@/tools";
 import FightTable from "@/components/FightTable.vue";
 
 // props
@@ -57,7 +57,7 @@ const getTimeAnalysis = computed(() => {
 // meta
 const suMeta = ref<SuMeta>({
   base: 0,
-  total: 2000,
+  total: 2000
 });
 
 // avatar
@@ -73,7 +73,14 @@ const remainNum = computed(() => {
 
 // sorted fights
 const sortedFights = computed(() => {
-  return fights.value.sort((a, b) => a.area.op.timestamp - b.area.op.timestamp);
+  const _fights = fights.value.sort((a, b) => a.area.op.timestamp - b.area.op.timestamp);
+  // map with idx
+  return _fights.map((fight, idx) => {
+    return {
+      ...fight,
+      idx: idx + suMeta.value.base + 1
+    };
+  });
 });
 
 
@@ -87,28 +94,28 @@ onMounted(() => {
   // get user fights
   const url = useSuStore().serverURL;
   axios.get(`${url}/public/user/${props.name}/fights`)
-      .then((res) => {
-        fightIds.value = snakeToCamel(res.data["fight_ids"]);
-        // get fights
-        for (const fightId of fightIds.value) {
-          axios.get(`${url}/public/fight/${fightId}`)
-              .then((res) => {
-                fights.value.push(snakeToCamel(res.data["fight_record"]));
-              });
-        }
-      });
+    .then((res) => {
+      fightIds.value = snakeToCamel(res.data["fight_ids"]);
+      // get fights
+      for (const fightId of fightIds.value) {
+        axios.get(`${url}/public/fight/${fightId}`)
+          .then((res) => {
+            fights.value.push(snakeToCamel(res.data["fight_record"]));
+          });
+      }
+    });
 
   // get user meta
   axios.get(`${url}/public/user/${props.name}/meta`)
-      .then((res) => {
-        suMeta.value = snakeToCamel(res.data["meta"]);
-      });
+    .then((res) => {
+      suMeta.value = snakeToCamel(res.data["meta"]);
+    });
 
   // get user avatar
   axios.get(`${url}/public/user/${props.name}/avatar`)
-      .then((res) => {
-        avatarUrl.value = snakeToCamel(res.data["avatar_url"]);
-      });
+    .then((res) => {
+      avatarUrl.value = snakeToCamel(res.data["avatar_url"]);
+    });
 });
 </script>
 
@@ -116,53 +123,62 @@ onMounted(() => {
   <div class="w-full">
     <div class="m-6 flex flex-col space-y-4">
 
-      <div v-if="props.name === useSuStore().author" class="alert alert-primary">
-        <svg-icon class="h-5 w-5" fill="none" icon-name="hearts" size="20"/>
+      <div v-if="props.name === useSuStore().author" class="alert bg-pink-50">
+        <svg-icon class="h-5 w-5" fill="none" icon-name="hearts" size="20" />
         <span class="font-moe">这是酥卷开发者的页面！</span>
       </div>
 
-      <div class="stats shadow stats-vertical md:stats-horizontal">
-
-        <div v-if="fightIds" class="stat">
-          <div class="stat-figure text-primary">
-            <svg-icon class="inline-block w-8 h-8 stroke-current" icon-name="award" size="32"/>
-          </div>
-          <div class="stat-title">总稻穗次数</div>
-          <div class="stat-value text-primary">{{ fightIds.length + suMeta.base }}</div>
-          <div class="stat-desc">{{ "含无记录 " + suMeta.base + " 次" }}</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-figure text-secondary">
-            <svg-icon class="inline-block w-8 h-8 stroke-current" icon-name="clock-rewind" size="32"/>
-          </div>
-          <div class="stat-title">最近记录时间</div>
-          <div class="stat-value text-secondary">
-            <span>{{ lastRecordTime[0] }}</span>
-            <span v-if="lastRecordTime[1]" class="text-xl">{{ lastRecordTime[1] }}</span>
-          </div>
-          <div class="stat-desc">{{ getTimeAnalysis }}</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-figure text-secondary">
-            <div class="avatar">
-              <div v-if="avatarUrl" class="w-16 rounded-full">
-                <img :src="avatarUrl" alt="avatar"/>
-              </div>
-              <span v-if="!avatarUrl" class="loading loading-ring loading-lg"></span>
+      <div class="flex justify-between space-x-2">
+        <div class="flex flex-row items-center space-x-6 card bg-secondary-content/20 border-4 border-primary-content w-2/12 p-4">
+          <div class="avatar">
+            <div v-if="avatarUrl" class="w-16 rounded-xl ring ring-secondary ring-offset-base-100 ring-offset-2">
+              <img :src="avatarUrl" alt="avatar" />
             </div>
+            <span v-if="!avatarUrl" class="loading loading-ring loading-lg"></span>
           </div>
-          <div class="stat-value">{{ progress + "%" }}</div>
-          <div class="stat-title">任务完成进度</div>
-          <div class="stat-desc text-secondary">{{ "余 " + remainNum + " 次" }}</div>
+          <div class="flex flex-col justify-center items-start">
+            <span class="font-bold text-xl text-accent">{{ props.name.split("-")[0].trim() }}</span>
+            <span class="text-sm text-gray-400 ml-0.5">{{ props.name.split("-")[1].trim() }}</span>
+          </div>
         </div>
 
+        <div class="stats shadow stats-vertical md:stats-horizontal w-10/12">
+
+          <div v-if="fightIds" class="stat">
+            <div class="stat-figure text-primary">
+              <svg-icon class="inline-block w-8 h-8 stroke-current" icon-name="award" size="32" />
+            </div>
+            <div class="stat-title">总稻穗次数</div>
+            <div class="stat-value text-primary">{{ fightIds.length + suMeta.base }}</div>
+            <div class="stat-desc">{{ "含无记录 " + suMeta.base + " 次" }}</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-figure text-secondary">
+              <svg-icon class="inline-block w-8 h-8 stroke-current" icon-name="clock-rewind" size="32" />
+            </div>
+            <div class="stat-title">最近记录时间</div>
+            <div class="stat-value text-secondary">
+              <span>{{ lastRecordTime[0] }}</span>
+              <span v-if="lastRecordTime[1]" class="text-xl">{{ lastRecordTime[1] }}</span>
+            </div>
+            <div class="stat-desc">{{ getTimeAnalysis }}</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-figure text-secondary">
+              <svg-icon class="inline-block w-8 h-8 stroke-current" icon-name="pie" size="32" />
+            </div>
+            <div class="stat-value">{{ progress + "%" }}</div>
+            <div class="stat-title">任务完成进度</div>
+            <div class="stat-desc text-secondary">{{ "余 " + remainNum + " 次" }}</div>
+          </div>
+        </div>
       </div>
 
       <div v-if="fights && fights.length !== 0" class="flex flex-col space-y-2">
         <fight-table
-            v-for="(fight, f_idx) in sortedFights" :key="f_idx" :fight="fight" :idx="f_idx as number + suMeta.base + 1"/>
+          v-for="fight in sortedFights.slice().reverse()" :key="fight.idx" :fight="fight" :idx="fight.idx" />
       </div>
 
     </div>

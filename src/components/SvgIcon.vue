@@ -1,11 +1,11 @@
 <template>
   <svg :style="{ width: size + 'px', height: size + 'px' }" aria-hidden="true">
-    <use :fill="color" :href="symbolId"/>
+    <use :fill="color" :href="symbolId" />
   </svg>
 </template>
 
 <script lang="ts" setup>
-import {computed} from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
   iconName: {
